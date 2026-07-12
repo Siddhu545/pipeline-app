@@ -10,13 +10,14 @@ pipeline {
         }
         stage('SonarQube Scan') {
             steps {
-                echo 'Scanning code with Sonarqube'
+                echo 'Scanning code with SonarQube...'
                 withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
                     sh '''
                         docker run --rm \
                           --network pipeline-net \
                           -v "$(pwd):/usr/src" \
                           sonarsource/sonar-scanner-cli \
+                          -Dsonar.host.url=http://sonarqube:9000 \
                           -Dsonar.token=$SONAR_TOKEN
                     '''
                 }
