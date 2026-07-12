@@ -18,7 +18,7 @@ pipeline {
                           -v "$(pwd):/usr/src" \
                           sonarsource/sonar-scanner-cli \
                           -Dsonar.host.url=http://sonarqube:9000 \
-                          -Dsonar.token=$SONAR_TOKEN
+                          -Dsonar.login=$SONAR_TOKEN
                     '''
                 }
             }
