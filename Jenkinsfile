@@ -66,5 +66,24 @@ pipeline {
                 }
             }
         }
+        stage('Update Manifest in Git') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                    sh '''
+                        # Update the image tag in deployment.yaml to the new build number
+                        sed -i "s|${DOCKER_IMAGE}:.*|${DOCKER_IMAGE}:${BUILD_NUMBER}|" k8s/deployment.yaml
+
+                        # Configure git identity for the commit
+                        git config user.email "jenkins@pipeline.local"
+                        git config user.name "Jenkins CI"
+
+                        # Commit and push the change
+                        git add k8s/deployment.yaml
+                        git commit -m "Update image to ${BUILD_NUMBER} [ci skip]"
+                        git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Siddhu545/pipeline-app.git HEAD:main
+                    '''
+                }
+            }
+        }
     }
 }
