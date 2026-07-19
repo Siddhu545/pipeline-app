@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: pipeline-app
-          image: pipeline-app:1.0
-          imagePullPolicy: IfNotPresent
+          image: sidpk/pipeline-app:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
 ---
